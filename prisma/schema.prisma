@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String?
+  phone     Int @unique
+  tourPeriod  TourPeriod[]
+  travel Travel[]
+}
+
+model TourPeriod{
+  id        Int     @id @default(autoincrement())
+  startDate DateTime  
+  endDate   DateTime
+  userId  Int?
+  user User?   @relation(fields: [userId],references: [id])
+  travels   Travel[]
+}
+
+model Travel {
+  id          Int     @id @default(autoincrement()) 
+  itinerary   String
+  provider    String
+  label       String  
+  price       Float
+  base        Int 
+  restaurant  Float
+  ariaryPax   Int
+  course      Float
+  euroPax     Float
+  user User?   @relation(fields: [userId],references: [id])
+  tourPeriod  TourPeriod?  @relation(fields: [tourPeriodId],references: [id])
+  tourPeriodId  Int? 
+  userId      Int?
+}
